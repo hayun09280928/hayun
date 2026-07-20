@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import streamlit as st
 
 # --- 1. 사이드바 (기본 설정) ---
