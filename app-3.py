@@ -7,7 +7,7 @@ def reset_game():
     st.session_state.end_time = 0
     st.session_state.result = 0
 
-# session_state 초기화 (처음 앱을 실행했을 때만 동작)
+# session_state 초기화
 if 'start_time' not in st.session_state:
     reset_game()
 
@@ -23,23 +23,26 @@ with col1:
 
 with col2:
     if st.button("종료", use_container_width=True):
+        # 시작 버튼을 누른 상태일 때만 작동 (0이 아닐 때)
         if st.session_state.start_time != 0:
             st.session_state.end_time = time.time()
             # 걸린 시간 계산 (종료 시간 - 시작 시간)
             st.session_state.result = st.session_state.end_time - st.session_state.start_time
+            
+            # 🔥 [핵심 수정] 종료 처리가 끝났으므로 start_time을 다시 0으로 초기화!
+            # 이렇게 하면 다음번에 다시 종료를 눌러도 아래 else문(경고창)으로 빠지게 됩니다.
+            st.session_state.start_time = 0 
         else:
-            st.warning("시작 버튼을 먼저 눌러주세요!")
+            st.warning("시작 버튼을 먼저 눌러주세요! (이미 종료되었거나 아직 시작하지 않음)")
 
-# 결과 출력 영역
+# 결과 출력 영역 (종료 시간이 기록되었을 때만 출력)
 if st.session_state.end_time != 0:
     diff = st.session_state.result
-    st.header(f"결과: {diff:.2f}초") # 소수점 둘째자리까지 표시
+    st.header(f"결과: {diff:.2f}초")
     
-    # 성공 판정 (9.7초 ~ 10.3초 사이)
     if 9.7 <= diff <= 10.3:
         st.success("🎉 대단해요! 정확합니다!")
     else:
         st.error(f"❌ 10초와 {abs(10-diff):.2f}초 차이가 납니다. 다시 도전해보세요!")
 
 st.button("다시 하기", on_click=reset_game)
-
