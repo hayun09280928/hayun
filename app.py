@@ -44,18 +44,7 @@ if st.button("코디 완성하기"):
         * **매칭:** {shoes}와 {', '.join(acc) if acc else '악세서리 없이 깔끔하게!'}
         """)
         st.success("오늘의 스타일링이 완성되었습니다! 자신 있게 외출하세요!")
-        st.markdown("---")
-if st.button("코디 완성하기"):
-    with st.container(border=True):
-        st.subheader(f"{user_name}님의 오늘의 룩북")
-        st.write(f"오늘 같은 **{weather}** 날씨에는 이렇게 입어보세요!")
-        st.markdown(f"""
-        * **상의:** {top_color} {top_type}
-        * **하의:** {bottom_color} {bottom_type}
-        * **매칭:** {shoes}와 {', '.join(acc) if acc else '악세서리 없이 깔끔하게!'}
-        """)
-        st.success("오늘의 스타일링이 완성되었습니다! 자신 있게 외출하세요!")
 
-    with st.expander("코디 연출 팁 영상 보기"):
+     with st.expander("코디 연출 팁 영상 보기"):
         st.video("https://www.youtube.com/watch?v=lkMZ8ytly1k")
         st.write("전문가가 제안하는 코디 연출법을 참고해 보세요.")
