@@ -28,9 +28,6 @@ with col2:
             st.session_state.end_time = time.time()
             # 걸린 시간 계산 (종료 시간 - 시작 시간)
             st.session_state.result = st.session_state.end_time - st.session_state.start_time
-            
-            # 🔥 [핵심 수정] 종료 처리가 끝났으므로 start_time을 다시 0으로 초기화!
-            # 이렇게 하면 다음번에 다시 종료를 눌러도 아래 else문(경고창)으로 빠지게 됩니다.
             st.session_state.start_time = 0 
         else:
             st.warning("시작 버튼을 먼저 눌러주세요! (이미 종료되었거나 아직 시작하지 않음)")
