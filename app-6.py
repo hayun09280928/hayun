@@ -84,7 +84,7 @@ def page_lab():
     elif oh_count > h_count:
         st.info("현재 용액: 염기성 🔵 (OH- 이온 남음)")
     else:
-        st.snow()
+        st.ballon()
         st.success("🎉 중화점 달성! (H+ 와 OH- 수가 일치하여 완벽한 중성 🟢)")
 
 def page_report():
