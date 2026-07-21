@@ -1,10 +1,8 @@
 import streamlit as st
 from openai import OpenAI
 
-# OpenAI 클라이언트 초기화
 ai_client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# 세션 상태 초기화
 if 'todo_list' not in st.session_state:
     st.session_state.todo_list = []
 if 'user_motto' not in st.session_state:
@@ -97,7 +95,6 @@ def page_ai_coach():
             )
             st.write(response.choices[0].message.content)
 
-# 페이지 네비게이션 설정 (AI 코치 추가)
 pg = st.navigation([
     st.Page(page_motto, title="오늘의 다짐", icon="📣"),
     st.Page(page_todo, title="오늘의 할 일", icon="✅"),
