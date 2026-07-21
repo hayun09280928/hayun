@@ -71,7 +71,6 @@ def page_lab():
         key="ind_select",
     )
 
-    # 가수 계산: 황산은 2가 산
     n_a = 2 if "H2SO4" in st.session_state.acid_type else 1
     n_b = 1  # NaOH
 
@@ -109,7 +108,6 @@ def page_report():
     }
 
     st.subheader("📊 혼합 용액 내 이온 수 분포")
-    # matplotlib 대신 Streamlit 기본 막대 차트 사용
     st.bar_chart(ion_data)
 
     st.markdown("---")
@@ -118,8 +116,6 @@ def page_report():
         st.session_state.base_vol = 10
         st.rerun()
 
-
-# --- 6. 페이지 4: AI 화학 튜터 ---
 def page_ai_tutor():
     st.header("🧐 AI 화학 선생님에게 질문하기")
 
