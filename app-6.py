@@ -1,10 +1,8 @@
 import streamlit as st
 from openai import OpenAI
 
-# OpenAI 클라이언트 설정 (API 키 설정 필요)
 ai_client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# --- 1. 초기 세션 상태 설정 ---
 if "acid_type" not in st.session_state:
     st.session_state.acid_type = "HCl (염산)"
 if "acid_vol" not in st.session_state:
@@ -16,8 +14,6 @@ if "base_vol" not in st.session_state:
 if "indicator" not in st.session_state:
     st.session_state.indicator = "BTB 용액"
 
-
-# --- 2. st.dialog 기능 활용 (조건 수정 팝업) ---
 @st.dialog("⚙️ 실험 조건 상세 설정")
 def edit_experiment_settings():
     st.write("기본 산/염기 용액의 종류를 변경합니다.")
@@ -32,8 +28,6 @@ def edit_experiment_settings():
         st.toast("실험 조건이 변경되었습니다!")
         st.rerun()
 
-
-# --- 3. 페이지 1: 화학 개념 정리 ---
 def page_concept():
     st.header("📣 1. 중화반응 핵심 개념 요약")
     st.info(
@@ -52,7 +46,6 @@ def page_concept():
     st.markdown("---")
 
 
-# --- 4. 페이지 2: 중화반응 가상 실험 ---
 def page_lab():
     st.header("🧪 2. 중화반응 가상 실험실")
 
@@ -91,11 +84,9 @@ def page_lab():
     elif oh_count > h_count:
         st.info("현재 용액: 염기성 🔵 (OH- 이온 남음)")
     else:
-        st.balloons()
+        st.snow()
         st.success("🎉 중화점 달성! (H+ 와 OH- 수가 일치하여 완벽한 중성 🟢)")
 
-
-# --- 5. 페이지 3: 이온 수 분석 리포트 (st.bar_chart 사용!) ---
 def page_report():
     st.header("📈 3. 이온 수 & 반응 분석 리포트")
 
@@ -110,7 +101,6 @@ def page_report():
     cl_ion = h_moles
     na_ion = oh_moles
 
-    # Streamlit 자체 내장 딕셔너리 차트 기능 사용 (matplotlib 미사용)
     ion_data = {
         "수소 이온(H+)": rem_h,
         "수산화 이온(OH-)": rem_oh,
