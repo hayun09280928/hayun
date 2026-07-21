@@ -13,7 +13,6 @@ def add_todo():
         st.session_state.todo_input = ""
         
 def page1():
-    st.title("🌱 갓생 살기 플래너")
     st.header("📣 1. 오늘의 다짐")
     motto = st.text_input("나의 한 줄 좌우명을 적어주세요")
     if st.button("다짐 저장"):
