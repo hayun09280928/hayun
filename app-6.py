@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import streamlit as st
 
 # --- 1. 초기 세션 상태 설정 (제시된 코드 구조 활용) ---
