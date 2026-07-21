@@ -164,7 +164,6 @@ def page_ai_tutor():
         )
 
 
-# --- 7. 상단 네비게이션 ---
 pg = st.navigation(
     [
         st.Page(page_concept, title="개념 정리", icon="📣"),
