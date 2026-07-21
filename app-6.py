@@ -1,6 +1,10 @@
 import streamlit as st
+from openai import OpenAI
 
-# --- 1. 초기 세션 상태 설정 (제시된 코드 구조 활용) ---
+# OpenAI 클라이언트 설정 (API 키 설정 필요)
+ai_client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+# --- 1. 초기 세션 상태 설정 ---
 if "acid_type" not in st.session_state:
     st.session_state.acid_type = "HCl (염산)"
 if "acid_vol" not in st.session_state:
@@ -74,7 +78,7 @@ def page_lab():
         key="ind_select",
     )
 
-    # 가치(가수) 계산: 황산은 2가 산
+    # 가수 계산: 황산은 2가 산
     n_a = 2 if "H2SO4" in st.session_state.acid_type else 1
     n_b = 1  # NaOH
 
@@ -91,9 +95,9 @@ def page_lab():
         st.success("🎉 중화점 달성! (H+ 와 OH- 수가 일치하여 완벽한 중성 🟢)")
 
 
-# --- 5. 페이지 3: 이온 수 분석 리포트 ---
+# --- 5. 페이지 3: 이온 수 분석 리포트 (st.bar_chart 사용!) ---
 def page_report():
-    st.header("📈 3. 이온 수 & 온도 분석 리포트")
+    st.header("📈 3. 이온 수 & 반응 분석 리포트")
 
     n_a = 2 if "H2SO4" in st.session_state.acid_type else 1
     n_b = 1
@@ -106,24 +110,26 @@ def page_report():
     cl_ion = h_moles
     na_ion = oh_moles
 
-    # 막대그래프 시각화
-    fig, ax = plt.subplots()
-    ions = ["H+", "OH-", "구경꾼(산)", "Na+"]
-    counts = [rem_h, rem_oh, cl_ion, na_ion]
-    colors = ["crimson", "dodgerblue", "gray", "skyblue"]
+    # Streamlit 자체 내장 딕셔너리 차트 기능 사용 (matplotlib 미사용)
+    ion_data = {
+        "수소 이온(H+)": rem_h,
+        "수산화 이온(OH-)": rem_oh,
+        "음이온(Cl-/SO42-)": cl_ion,
+        "나트륨 이온(Na+)": na_ion,
+    }
 
-    ax.bar(ions, counts, color=colors)
-    ax.set_ylabel("상대적 이온 수")
-    ax.set_title("혼합 용액 내 이온 수 분포")
-    st.pyplot(fig)
+    st.subheader("📊 혼합 용액 내 이온 수 분포")
+    # matplotlib 대신 Streamlit 기본 막대 차트 사용
+    st.bar_chart(ion_data)
 
+    st.markdown("---")
     if st.button("실험 조건 전체 초기화"):
         st.session_state.acid_vol = 20
         st.session_state.base_vol = 10
         st.rerun()
 
 
-# --- 6. 페이지 4: AI 화학 튜터 (질의응답) ---
+# --- 6. 페이지 4: AI 화학 튜터 ---
 def page_ai_tutor():
     st.header("🧐 AI 화학 선생님에게 질문하기")
 
@@ -147,15 +153,20 @@ def page_ai_tutor():
             st.markdown(question)
 
         with st.chat_message("assistant"):
-            # 현재 사용자의 실험 상태를 컨텍스트로 함께 전달
             status_context = f"현재 학생의 실험 상황: 산 부피={st.session_state.acid_vol}mL, 염기 부피={st.session_state.base_vol}mL"
             prompt = st.session_state.messages + [
                 {"role": "system", "content": status_context}
             ]
 
             with st.spinner("AI 선생님이 답변을 작성 중입니다...🤔"):
-                # 사용 중이신 LLM API 호출 (OpenAI API 코드 작성 위치)
-                ai_response = f"질문해주신 '{question}'에 대한 답변입니다! 산과 염기가 만나면 물과 중화열이 발생한다는 점을 기억해보세요."
+                try:
+                    response = ai_client.chat.completions.create(
+                        model="gpt-4o-mini", messages=prompt
+                    )
+                    ai_response = response.choices[0].message.content
+                except Exception as e:
+                    ai_response = "API 키 문제로 답변을 불러올 수 없습니다. secrets 설정을 확인해주세요."
+
                 st.markdown(ai_response)
 
         st.session_state.messages.append(
@@ -163,7 +174,7 @@ def page_ai_tutor():
         )
 
 
-# --- 7. st.navigation 및 st.Page를 활용한 상단 네비게이션 ---
+# --- 7. 상단 네비게이션 ---
 pg = st.navigation(
     [
         st.Page(page_concept, title="개념 정리", icon="📣"),
