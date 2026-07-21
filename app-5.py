@@ -92,4 +92,4 @@ pg = st.navigation([
     st.Page(page_report, title="나의 갓생 지수", icon="📈")], position="top")
 
 st.title("🌱 갓생 살기 플래너")
-pg.run()  오류 찾아저ㅜ
+pg.run()
