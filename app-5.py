@@ -21,7 +21,7 @@ def page1():
         st.success("좌우명이 등록되었습니다!")
     st.markdown("---")
 
- def page2():
+def page2():
     st.header("✅ 2. 오늘의 할 일")
     st.write(f"현재 다짐: **{st.session_state.user_motto}**")
     new_todo = st.text_input("추가할 할 일을 입력하세요", key="todo_input")
